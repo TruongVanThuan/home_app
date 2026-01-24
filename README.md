@@ -20,4 +20,4 @@ or
 docker build -t home_app .
 
 docker run -d --name home_app -p 3000:80 home_app
-docker run -it -p 5173:5173 -v $(pwd):/app home_app
+docker run -it --rm -p 5173:5173 -v $(pwd):/app -v /app/node_modules home_app
