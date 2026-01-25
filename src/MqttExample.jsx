@@ -4,8 +4,9 @@ import React, { useEffect, useRef, useState } from "react";
 function MqttExample() {
     const clientRef = useRef(null);
     const [message, setMessage] = useState("");
-
+    console.log("an lz");
     useEffect(() => {
+        console.log(clientRef.current);
         if (!clientRef.current) {
             const brokerUrl = "wss://f7fda5477fe0413392c1eef030885503.s1.eu.hivemq.cloud:8884/mqtt"; // or your HiveMQ Cloud endpoint
             const options = {
