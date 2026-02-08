@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 function MqttExample() {
     const clientRef = useRef(null);
     const [message, setMessage] = useState("");
-    console.log("an lz");
     useEffect(() => {
         console.log(clientRef.current);
         if (!clientRef.current) {
@@ -13,7 +12,7 @@ function MqttExample() {
                 clientId: "react_client_" + Math.random().toString(16).substr(2, 8),
                 username: "thuan", // HiveMQ Cloud username
                 password: "Thuan123", // HiveMQ Cloud password
-                connectTimeout: 10_000,     // ms
+                connectTimeout: 30000,     // ms
             };
 
             clientRef.current = mqtt.connect(brokerUrl, options);
@@ -28,7 +27,8 @@ function MqttExample() {
             });
 
             clientRef.current.on("message", (topic, message) => {
-                console.log("📩 Message received:", topic, message.toString());
+                console.log("📩 Trạng thái:", topic, message.toString());
+                setMessage(message.toString());
             });
 
             clientRef.current.on("error", (err) => {
@@ -42,15 +42,25 @@ function MqttExample() {
         }
     }, []);
 
-    const sendMessage = () => {
-        clientRef.current.publish("esp32/in", "Hello from React!");
+    const OpenCmd = () => {
+        clientRef.current.publish("esp32/in", "open_cmd");
+    };
+
+    const CloseCmd = () => {
+        clientRef.current.publish("esp32/in", "close_cmd");
+    };
+    
+    const StopCmd = () => {
+        clientRef.current.publish("esp32/in", "stop_cmd");
     };
 
     return (
         <div>
             <h2>HiveMQ React MQTT Demo</h2>
-            <button onClick={sendMessage}>Send Message</button>
-            <p>Last Message: {message}</p>
+            <button onClick={OpenCmd}>Mở bạt</button>
+            <button onClick={StopCmd}>Ngừng</button>
+            <button onClick={CloseCmd}>Đóng bạt</button>
+            <p>Last Message: {message.toString()}</p>
         </div>
     );
 }
